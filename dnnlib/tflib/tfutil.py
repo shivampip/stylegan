@@ -9,7 +9,10 @@
 
 import os
 import numpy as np
-import tensorflow as tf
+# import tensorflow as tf
+
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from typing import Any, Iterable, List, Union
 
@@ -31,7 +34,7 @@ def is_tf_expression(x: Any) -> bool:
     return isinstance(x, (tf.Tensor, tf.Variable, tf.Operation))
 
 
-def shape_to_list(shape: Iterable[tf.compat.v1.Dimension]) -> List[Union[int, None]]:
+def shape_to_list(shape: Iterable[tf.Dimension]) -> List[Union[int, None]]:
     """Convert a Tensorflow shape to a list of ints."""
     return [dim.value for dim in shape]
 
@@ -71,9 +74,9 @@ def absolute_name_scope(scope: str) -> tf.name_scope:
     return tf.name_scope(scope + "/")
 
 
-def absolute_variable_scope(scope: str, **kwargs) -> tf.compat.v1.variable_scope:
+def absolute_variable_scope(scope: str, **kwargs) -> tf.variable_scope:
     """Forcefully enter the specified variable scope, ignoring any surrounding scopes."""
-    return tf.compat.v1.variable_scope(tf.VariableScope(name=scope, **kwargs), auxiliary_name_scope=False)
+    return tf.variable_scope(tf.VariableScope(name=scope, **kwargs), auxiliary_name_scope=False)
 
 
 def _sanitize_tf_config(config_dict: dict = None) -> dict:
